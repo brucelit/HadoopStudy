@@ -5,6 +5,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -12,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class WordcountDriver {
 	public static void main(String[] args) throws ClassNotFoundException, InterruptedException, IOException {
 		
+		args = new String[] {"E:/Hadoop/input","E:/Hadoop/output"};
 		Configuration conf = new Configuration();
 		//获取job对象
 		Job job = Job.getInstance(conf);
@@ -34,7 +36,13 @@ public class WordcountDriver {
 		//设置输入路径和输出路径
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		
+		//增加如下代码可以将切片数改为设定值,将虚拟存储切片最大值设置为4M = 4194304
+		job.setInputFormatClass(CombineTextInputFormat.class);
+		CombineTextInputFormat.setMaxInputSplitSize(job, 20971520);
+		
 		//提交job
-		job.waitForCompletion(true);
+		boolean result = job.waitForCompletion(true);
+		System.exit(result?1:0);
 	}
 }
