@@ -38,9 +38,12 @@ public class WordcountDriver {
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		
 		//增加如下代码可以将切片数改为设定值,将虚拟存储切片最大值设置为4M = 4194304
-		job.setInputFormatClass(CombineTextInputFormat.class);
-		CombineTextInputFormat.setMaxInputSplitSize(job, 20971520);
+//		job.setInputFormatClass(CombineTextInputFormat.class);
+//		CombineTextInputFormat.setMaxInputSplitSize(job, 20971520);
 		
+		
+		// 设置分区
+		job.setNumReduceTasks(3);
 		//提交job
 		boolean result = job.waitForCompletion(true);
 		System.exit(result?1:0);

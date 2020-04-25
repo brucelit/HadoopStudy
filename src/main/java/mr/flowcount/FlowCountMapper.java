@@ -1,4 +1,4 @@
-package mr.serialtest;
+package mr.flowcount;
 
 import java.io.IOException;
 
@@ -21,6 +21,7 @@ public class FlowCountMapper extends Mapper<LongWritable, Text, Text, FlowBean>{
 			throws IOException, InterruptedException {
 		// 获取一行
 		String line = value.toString();
+		
 		
 		
 		// 根据"\t"切割

@@ -1,4 +1,4 @@
-package mr.serialtest;
+package mr.flowcount;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ public class FlowCountDriver {
 	
 	public static void main(String[] args) throws IOException,ClassNotFoundException, InterruptedException{
 		
-		args = new String [] {"E:/Hadoop/phone_input","E:/Hadoop/output1"};
+		args = new String [] {"E:/Hadoop/phone_input","E:/Hadoop/output2"};
 		// 获取job对象
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf );
@@ -34,6 +34,10 @@ public class FlowCountDriver {
 		//设置最终输出的key和value类型
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(FlowBean.class);
+		
+		// 设置分区
+		job.setPartitionerClass(ProvincePartitioner.class);
+		job.setNumReduceTasks(4);
 		
 		//设置输入输出路径
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
